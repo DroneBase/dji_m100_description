@@ -1,13 +1,14 @@
 <?xml version="1.0"?>
 
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
-    <xacro:include filename="$(find dji_m100_description)/urdf/gimbal_joints.xacro"/>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="dji_m100_gimbal">
+    <xacro:include filename="$(find dji_m100_description)/urdf/gimbal_joints.xacro" />
     <xacro:property name="M_PI" value="3.14"/>
     <material name="black">
         <color rgba="0 0 0 1"/>
     </material>
-    <xacro:macro name="dji_m100_gimbal">
+    <xacro:macro name="dji_m100_gimbal" params="*origin">
         <joint name="gimbal_base_joint" type="fixed">
+            <xacro:insert_block name="origin" /> 
             <parent link="base_link"/>
             <child link="gimbal_base_plate" />
         </joint>
@@ -33,7 +34,7 @@
                 <inertia ixx="0.0000125" ixy="0.0" ixz="0.0" iyy="0.0000125" iyz="0.0" izz="0.0000125"/>
             </inertial>
         </link>
-         <revolute_gimbal_joint
+         <xacro:revolute_gimbal_joint
             name="gimbal_roll_joint"
             parent="gimbal_base_plate"
             child="gimbal_roll_link"
@@ -55,7 +56,7 @@
             </visual>
         </link>
 
-        <revolute_gimbal_joint
+        <xacro:revolute_gimbal_joint
             name="gimbal_pitch_joint"
             parent="gimbal_roll_link"
             child="gimbal_pitch_link"
@@ -77,7 +78,7 @@
                 </geometry>
             </visual>
         </link>
-        <revolute_gimbal_joint
+        <xacro:revolute_gimbal_joint
             name="gimbal_yaw_joint"
             parent="gimbal_pitch_link"
             child="gimbal_yaw_link"
@@ -100,10 +101,10 @@
                 </geometry>
             </visual>
         </link>
-        <gazebo>
+        <!-- <gazebo>
             <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
             </plugin>
-        </gazebo>
+        </gazebo> -->
         <gazebo reference="gimbal_base_plate">
             <material>Gazebo/FlatBlack</material>
         </gazebo>
